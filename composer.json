@@ -1,0 +1,17 @@
+{
+  "name": "samuel/phocate",
+  "description": "php analyzer",
+  "minimum-stability": "dev",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Samuel Ytterbrink",
+      "email": "neppord@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Phocate\\" : "src"
+    }
+  }
+}
