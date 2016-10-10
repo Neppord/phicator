@@ -11,4 +11,11 @@ abstract class TokensParser
     {
         return new BindTokensParser($this, $closure);
     }
+    public function before(TokensParser $parser): TokensParser
+    {
+        /** @noinspection PhpUnusedParameterInspection */
+        return $this->bind(function (array $tokens) use ($parser){
+            return $parser;
+        });
+    }
 }

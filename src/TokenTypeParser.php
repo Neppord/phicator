@@ -1,7 +1,7 @@
 <?php
 namespace Phocate;
 
-class TokenTypeParser extends TokenParser
+class TokenTypeParser extends TokensParser
 {
     /** @var int */
     private $type;
@@ -11,11 +11,11 @@ class TokenTypeParser extends TokenParser
         $this->type = $type;
     }
 
-    public function parse(Tokens $tokens): ?TokenResult
+    public function parse(Tokens $tokens): ?TokensResult
     {
         $head = $tokens->head();
         if ($head->type === $this->type) {
-            return new TokenResult($head, $tokens->tail());
+            return new TokensResult([$head], $tokens->tail());
         } else {
             return null;
         }
