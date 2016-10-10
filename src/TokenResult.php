@@ -1,26 +1,16 @@
 <?php
 namespace Phocate;
 
-class TokenResult extends SuccessResult
+class TokenResult
 {
-    /** @var mixed */
-    private $output;
+    /** @var Token */
+    public $token;
     /** @var Tokens */
-    private $tokens;
+    public $tokens;
 
-    public function __construct(mixed $output, Tokens $tokens)
+    public function __construct(Token $output, Tokens $tokens)
     {
-        $this->output = $output;
+        $this->token = $output;
         $this->tokens = $tokens;
-    }
-
-    public function output(): mixed
-    {
-        return $this->output;
-    }
-
-    public function tokens(): Tokens
-    {
-        return $this->tokens;
     }
 }

@@ -10,6 +10,8 @@ ini_set('memory_limit', '1024M');
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+$namespace_stmt_p = new NamespaceStmtParser();
+
 $project_dir = new Directory($argv[1]);
 $sql = "BEGIN;\n";
 $sql .= "CREATE TABLE IF NOT EXISTS namespaces (path TEXT, namespace TEXT);\n";
@@ -18,24 +20,18 @@ foreach($project_dir->getPhpFiles() as $php_file) {
     $path = $php_file->getPath();
     $tokens = $php_file->getTokens();
     echo "parsing: $path\n";
-    $in_namespace = false;
-    $namespace = '';
     while (!$tokens->nil()) {
-        $token = $tokens->head();
-        if ($in_namespace) {
-            switch ($token->type) {
-                case T_WHITESPACE: break;
-                case T_STRING: $namespace .= $token->contents; break;
-                case T_NS_SEPARATOR: $namespace .= '\\'; break;
-                default:
-                    $sql .= "INSERT OR REPLACE INTO namespaces (path, namespace) VALUES (\"$path\", \"$namespace\");\n";
-                    $in_namespace = false;
-            }
+        $result = $namespace_stmt_p->parse($tokens);
+        if ($result === null) {
+            $tokens = $tokens->tail();
+        } else {
+            $namespace = $result->result;
+            $tokens = $result->tokens;
+            $sql .= <<<SQL
+  INSERT OR REPLACE INTO namespaces (path, namespace)
+ VALUES ("$path", "$namespace");\n
+SQL;
         }
-        if ($token->type === T_NAMESPACE) {
-            $in_namespace = true;
-        }
-        $tokens = $tokens->tail();
     }
 }
 $sql .= 'END;';
