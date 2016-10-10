@@ -4,19 +4,17 @@ declare(strict_types = 1);
 namespace Phocate;
 
 
-class NamespaceStmtParser extends StringParser
+class ClassStmtParser extends StringParser
 {
+
     /** @var TokensParser */
     private $inner;
 
     public function __construct()
     {
-        $this->inner = (new TokenTypeParser(T_NAMESPACE))
+        $this->inner = (new TokenTypeParser(T_CLASS))
             ->before(new TokenTypeParser(T_WHITESPACE))
-            ->before(
-                (new TokenTypeParser(T_STRING))
-                    ->sepBy(new TokenTypeParser(T_NS_SEPARATOR))
-            );
+            ->before(new TokenTypeParser(T_STRING));
     }
 
     public function parse(Tokens $tokens): ?StringResult
@@ -28,7 +26,7 @@ class NamespaceStmtParser extends StringParser
             $strings = array_map(function (Token $token) {
                 return $token->contents;
             },$result->result);
-            return new StringResult(implode('\\', $strings), $result->tokens);
+            return new StringResult(implode('', $strings), $result->tokens);
         }
     }
 }
