@@ -7,5 +7,5 @@ namespace Phocate;
 interface ParseResult
 {
     public function succeeded(): bool;
-    public function result(): mixed;
+    public function tokens(): Tokens;
 }
