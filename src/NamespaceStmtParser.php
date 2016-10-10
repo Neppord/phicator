@@ -4,6 +4,11 @@ declare(strict_types = 1);
 namespace Phocate;
 
 
+use Phocate\Token\Token;
+use Phocate\Token\Tokens;
+use Phocate\Token\TokensParser;
+use Phocate\Token\TokenTypeParser;
+
 class NamespaceStmtParser extends StringParser
 {
     /** @var TokensParser */

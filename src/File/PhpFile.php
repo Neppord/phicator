@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Phocate\File;
 
 
-use Phocate\Tokens;
+use Phocate\Token\Tokens;
 
 class PhpFile
 {

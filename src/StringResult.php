@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace Phocate;
 
 
+use Phocate\Token\Tokens;
+
 class StringResult
 {
     /** @var string */

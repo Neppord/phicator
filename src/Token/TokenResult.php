@@ -1,5 +1,5 @@
 <?php
-namespace Phocate;
+namespace Phocate\Token;
 
 class TokenResult
 {
