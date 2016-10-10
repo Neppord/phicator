@@ -13,10 +13,10 @@ class NamespaceStmtParser
     {
         $this->inner = (new TokenTypeParser(T_NAMESPACE))
             ->before(new TokenTypeParser(T_WHITESPACE))
-            ->before(new SepByTokenParser(
-                new TokenTypeParser(T_STRING),
-                new TokenTypeParser(T_NS_SEPARATOR)
-            ));
+            ->before(
+                (new TokenTypeParser(T_STRING))
+                    ->sepBy(new TokenTypeParser(T_NS_SEPARATOR))
+            );
     }
 
     public function parse(Tokens $tokens): ?StringResult
