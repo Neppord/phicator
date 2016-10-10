@@ -14,11 +14,7 @@ class SepByTokenParser extends TokensParser
     public function __construct(TokensParser $parser, TokensParser $sep_by)
     {
         $this->parser = $parser;
-        $this->every_other = $sep_by->bind([$this, 'every_other']);
-    }
-
-    public function every_other(array $tokens) {
-        return $this->parser;
+        $this->every_other = $sep_by->before($parser);
     }
 
     public function parse(Tokens $tokens): ?TokensResult
