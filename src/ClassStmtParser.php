@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Phocate;
 
 
+use Phocate\Token\NothingTokensResult;
 use Phocate\Token\Token;
 use Phocate\Token\Tokens;
 use Phocate\Token\TokensParser;
@@ -25,7 +26,7 @@ class ClassStmtParser extends StringParser
     public function parse(Tokens $tokens): ?StringResult
     {
         $result = $this->inner->parse($tokens);
-        if ($result === null) {
+        if ($result instanceof NothingTokensResult) {
             return null;
         } else {
             $strings = array_map(function (Token $token) {

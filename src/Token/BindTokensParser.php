@@ -17,14 +17,14 @@ class BindTokensParser extends TokensParser
         $this->through = $through;
     }
 
-    public function parse(Tokens $tokens): ?TokensResult
+    public function parse(Tokens $tokens): TokensResult
     {
         $result = $this->from->parse($tokens);
-        if ($result != null) {
+        if ($result instanceof JustTokensResult) {
             $through = $this->through;
             return $through($result->result)->parse($result->tokens);
         } else {
-            return null;
+            return $result;
         }
     }
 }

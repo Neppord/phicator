@@ -18,18 +18,18 @@ class ManyTokensParser extends TokensParser
         $this->parser = $parser;
     }
 
-    public function parse(Tokens $tokens): ?TokensResult
+    public function parse(Tokens $tokens): TokensResult
     {
         $results = [[]];
         $result = $this->parser->parse($tokens);
-        if ($result === null) {
-            return null;
+        if ($result instanceof NothingTokensResult) {
+            return $result;
         }
         while ($result != null) {
             $results[] = $result->result;
             $tokens = $result->tokens;
             $result = $this->parser->parse($tokens);
         }
-        return new TokensResult(array_merge(...$results), $tokens);
+        return new JustTokensResult(array_merge(...$results), $tokens);
     }
 }

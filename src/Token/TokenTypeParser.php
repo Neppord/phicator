@@ -11,13 +11,13 @@ class TokenTypeParser extends TokensParser
         $this->type = $type;
     }
 
-    public function parse(Tokens $tokens): ?TokensResult
+    public function parse(Tokens $tokens): TokensResult
     {
         $head = $tokens->head();
         if ($head->type === $this->type) {
-            return new TokensResult([$head], $tokens->tail());
+            return new JustTokensResult([$head], $tokens->tail());
         } else {
-            return null;
+            return new NothingTokensResult();
         }
     }
 }
