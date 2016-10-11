@@ -8,5 +8,5 @@ use Phocate\Token\Tokens;
 
 abstract class StringParser
 {
-    abstract public function parse(Tokens $tokens): ?StringResult;
+    abstract public function parse(Tokens $tokens): StringResult;
 }

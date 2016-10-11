@@ -8,7 +8,7 @@ use Phocate\Token\Tokens;
 
 class FileParser
 {
-    public function parser(string $path, Tokens $tokens): ?FileResult
+    public function parser(string $path, Tokens $tokens): FileResult
     {
         $namespace_stmt_p = new NamespaceStmtParser();
         $class_stmt_p = new ClassStmtParser();
@@ -17,9 +17,9 @@ class FileParser
         $namespace = null;
         while (!$tokens->nil()) {
             $result = $namespace_stmt_p->parse($tokens);
-            if ($result === null) {
+            if ($result instanceof NothingStringResult) {
                 $result = $class_stmt_p->parse($tokens);
-                if ($result === null) {
+                if ($result instanceof NothingStringResult) {
                     $tokens = $tokens->tail();
                 } else {
                     $class = new ClassObject();

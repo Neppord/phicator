@@ -23,16 +23,16 @@ class ClassStmtParser extends StringParser
             ->before(new TokenTypeParser(T_STRING));
     }
 
-    public function parse(Tokens $tokens): ?StringResult
+    public function parse(Tokens $tokens): StringResult
     {
         $result = $this->inner->parse($tokens);
         if ($result instanceof NothingTokensResult) {
-            return null;
+            return new NothingStringResult();
         } else {
             $strings = array_map(function (Token $token) {
                 return $token->contents;
             },$result->result);
-            return new StringResult(implode('', $strings), $result->tokens);
+            return new JustStringResult(implode('', $strings), $result->tokens);
         }
     }
 }
