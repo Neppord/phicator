@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Phocate;
 
-
-use Phocate\Token\NothingTokensResult;
 use Phocate\Token\Token;
 use Phocate\Token\Tokens;
 use Phocate\Token\TokensParser;
@@ -25,14 +23,13 @@ class ClassStmtParser extends StringParser
 
     public function parse(Tokens $tokens): StringResult
     {
-        $result = $this->inner->parse($tokens);
-        if ($result instanceof NothingTokensResult) {
-            return new NothingStringResult();
-        } else {
+        return $this->inner
+            ->parse($tokens)
+            ->mapToStringResult(function (array $tokens) {
             $strings = array_map(function (Token $token) {
                 return $token->contents;
-            },$result->result);
-            return new JustStringResult(implode('', $strings), $result->tokens);
-        }
+            },$tokens);
+            return implode('', $strings);
+        });
     }
 }
