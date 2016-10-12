@@ -15,7 +15,7 @@ $file_p = new FileParser();
 $project_dir = new Directory($argv[1]);
 $sql = "BEGIN;\n";
 $sql .= "CREATE TABLE IF NOT EXISTS namespaces (path TEXT, namespace TEXT);\n";
-$sql .= "CREATE TABLE IF NOT EXISTS classes (path TEXT, namespace TEXT,  class_name TEXT);\n";
+$sql .= "CREATE TABLE IF NOT EXISTS classes (path TEXT, namespace TEXT,  class_name TEXT, FQN TEXT);\n";
 foreach($project_dir->getPhpFiles() as $php_file) {
     $path = $php_file->getPath();
     $tokens = $php_file->getTokens();
@@ -26,7 +26,7 @@ foreach($project_dir->getPhpFiles() as $php_file) {
         $sql .= "INSERT OR REPLACE INTO namespaces (path, namespace) VALUES (\"$path\", \"$namespace_name\");";
         foreach ($namespace->classes as $class) {
             $class_name = $class->name;
-            $sql .= "INSERT OR REPLACE INTO classes (path, namespace, class_name) VALUES (\"$path\", \"$namespace_name\", \"$class_name\");";
+            $sql .= "INSERT OR REPLACE INTO classes (path, namespace, class_name, FQN) VALUES (\"$path\", \"$namespace_name\", \"$class_name\", \"$namespace_name$class_name\");";
         }
     }
 }
