@@ -43,13 +43,15 @@ class FileParser
     {
         return (new Match(T_USE))
             ->before(new Match(T_WHITESPACE))
-            ->before((new Match(T_STRING))->sepBy(new Match(T_NS_SEPARATOR)))
+            ->before(
+                (new Match(T_STRING))->sepBy(new Match(T_NS_SEPARATOR))
+            )
             ->mapToEitherParser(function (array $tokens): Either {
                 $strings = array_map(function (Token $token) {
                     return $token->contents;
                 },$tokens);
                 $FQN = implode('\\', $strings);
-                return new UseObject($FQN, $tokens[count($tokens) - 1]->content);
+                return new UseObject($FQN, $tokens[count($tokens) - 1]->contents);
             });
     }
 
@@ -58,7 +60,9 @@ class FileParser
     {
         $namespace_stmt_p = self::namespace_parser();
         $class_stmt_p = self::class_parser();
+        $use_stmt_p = self::use_parser();
         $body_p = $namespace_stmt_p
+            ->ifFail($use_stmt_p)
             ->ifFail($class_stmt_p);
         $file = new FileObject();
         $file->path = $path;
@@ -80,7 +84,7 @@ class FileParser
                         $namespace = new NamespaceObject('\\');
                         $file->namespaces[] = $namespace;
                     }
-                    $namespace->uses[] = $object;
+                    $namespace->usages[] = $object;
                 } else if ($object instanceof ClassObject) {
                     if ($namespace === null) {
                         $namespace = new NamespaceObject('\\');

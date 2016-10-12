@@ -10,13 +10,13 @@ class UseObject implements Either
 {
 
     /** @var string */
-    private $FQN;
+    public $FQN;
     /** @var string */
-    private $as;
+    public $name;
 
     public function __construct(string $FQN, string $as)
     {
         $this->FQN = $FQN;
-        $this->as = $as;
+        $this->name = $as;
     }
 }

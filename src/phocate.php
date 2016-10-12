@@ -14,8 +14,9 @@ $file_p = new FileParser();
 
 $project_dir = new Directory($argv[1]);
 $sql = "BEGIN;\n";
-$sql .= "CREATE TABLE IF NOT EXISTS namespaces (path TEXT, namespace TEXT);\n";
-$sql .= "CREATE TABLE IF NOT EXISTS classes (path TEXT, namespace TEXT,  class_name TEXT, FQN TEXT);\n";
+$sql .= "CREATE TABLE IF NOT EXISTS namespaces (namespace_path TEXT, namespace TEXT);\n";
+$sql .= "CREATE TABLE IF NOT EXISTS usages (usage_path TEXT, namespace TEXT, FQN TEXT, name TEXT);\n";
+$sql .= "CREATE TABLE IF NOT EXISTS classes (class_path TEXT, namespace TEXT, FQN TEXT, name TEXT);\n";
 foreach($project_dir->getPhpFiles() as $php_file) {
     $path = $php_file->getPath();
     $tokens = $php_file->getTokens();
@@ -23,10 +24,15 @@ foreach($project_dir->getPhpFiles() as $php_file) {
     $result = $file_p->parser($path, $tokens);
     foreach ($result->file->namespaces as $namespace) {
         $namespace_name = $namespace->name;
-        $sql .= "INSERT OR REPLACE INTO namespaces (path, namespace) VALUES (\"$path\", \"$namespace_name\");";
+        $sql .= "INSERT OR REPLACE INTO namespaces (namespace_path, namespace) VALUES (\"$path\", \"$namespace_name\");\n";
+        foreach ($namespace->usages as $use) {
+            $name = $use->name;
+            $FQN = $use->FQN;
+            $sql .= "INSERT OR REPLACE INTO usages (usage_path, namespace, FQN, name) VALUES (\"$path\", \"$namespace_name\", \"$FQN\", \"$name\");\n";
+        }
         foreach ($namespace->classes as $class) {
-            $class_name = $class->name;
-            $sql .= "INSERT OR REPLACE INTO classes (path, namespace, class_name, FQN) VALUES (\"$path\", \"$namespace_name\", \"$class_name\", \"$namespace_name$class_name\");";
+            $name = $class->name;
+            $sql .= "INSERT OR REPLACE INTO classes (class_path, namespace, FQN, name) VALUES (\"$path\", \"$namespace_name\", \"$namespace_name\\$name\", \"$name\");\n";
         }
     }
 }

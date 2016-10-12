@@ -14,7 +14,7 @@ class NamespaceObject implements Either
     /** @var ClassObject[] */
     public $classes = [];
     /** @var UseObject[] */
-    public $uses = [];
+    public $usages = [];
     public $functions = [];
     public $variables = [];
 
