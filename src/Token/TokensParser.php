@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace Phocate\Token;
 
 
+use Phocate\StringParser;
+
 abstract class TokensParser
 {
     abstract public function parse(Tokens $tokens): TokensResult;
@@ -23,5 +25,10 @@ abstract class TokensParser
     public function sepBy(TokensParser $separator): TokensParser
     {
         return new SepByTokenParser($this, $separator);
+    }
+
+    public function mapToStringParser(callable $closure): StringParser
+    {
+        return new MapTokenParserToStringParser($this, $closure);
     }
 }
