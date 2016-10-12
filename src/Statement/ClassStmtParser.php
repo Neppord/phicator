@@ -1,8 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace Phocate;
+namespace Phocate\Statement;
 
+use Phocate\StringParser;
+use Phocate\StringResult;
 use Phocate\Token\Token;
 use Phocate\Token\Tokens;
 use Phocate\Token\TokensParser;

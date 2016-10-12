@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace Phocate;
 
 
+use Phocate\Statement\ClassStmtParser;
+use Phocate\Statement\NamespaceStmtParser;
 use Phocate\Token\Tokens;
 
 class FileParser
