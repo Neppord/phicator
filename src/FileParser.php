@@ -39,6 +39,20 @@ class FileParser
             });
     }
 
+    public static function use_parser()
+    {
+        return (new Match(T_USE))
+            ->before(new Match(T_WHITESPACE))
+            ->before((new Match(T_STRING))->sepBy(new Match(T_NS_SEPARATOR)))
+            ->mapToEitherParser(function (array $tokens): Either {
+                $strings = array_map(function (Token $token) {
+                    return $token->contents;
+                },$tokens);
+                $FQN = implode('\\', $strings);
+                return new UseObject($FQN, $tokens[count($tokens) - 1]->content);
+            });
+    }
+
 
     public function parser(string $path, Tokens $tokens): FileResult
     {
@@ -48,6 +62,7 @@ class FileParser
             ->ifFail($class_stmt_p);
         $file = new FileObject();
         $file->path = $path;
+        /** @var NamespaceObject $namespace */
         $namespace = null;
 
         while (!$tokens->nil()) {
@@ -60,6 +75,12 @@ class FileParser
                 if ($object instanceof NamespaceObject) {
                     $namespace = $object;
                     $file->namespaces[] = $namespace;
+                } else if ($object instanceof UseObject) {
+                    if ($namespace === null) {
+                        $namespace = new NamespaceObject('\\');
+                        $file->namespaces[] = $namespace;
+                    }
+                    $namespace->uses[] = $object;
                 } else if ($object instanceof ClassObject) {
                     if ($namespace === null) {
                         $namespace = new NamespaceObject('\\');
