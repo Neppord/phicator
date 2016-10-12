@@ -3,10 +3,7 @@ declare(strict_types = 1);
 
 namespace Phocate;
 
-
-use Phocate\Token\Many;
 use Phocate\Token\Match;
-use Phocate\Token\MatchAnyExcept;
 use Phocate\Token\Token;
 use Phocate\Token\Tokens;
 
@@ -18,7 +15,7 @@ class FileParser
             ->before(new Match(T_WHITESPACE))
             ->before(
                 (new Match(T_STRING))->sepBy(new Match(T_NS_SEPARATOR))
-            )->mapToStringParser(function (array $tokens){
+            )->mapToStringParser(function (array $tokens): String {
                 $strings = array_map(function (Token $token) {
                     return $token->contents;
                 },$tokens);
@@ -31,7 +28,7 @@ class FileParser
         return (new Match(T_CLASS))
             ->before(new Match(T_WHITESPACE))
             ->before(new Match(T_STRING))
-            ->mapToStringParser(function (array $tokens) {
+            ->mapToStringParser(function (array $tokens): String {
                 $strings = array_map(function (Token $token) {
                     return $token->contents;
                 },$tokens);
