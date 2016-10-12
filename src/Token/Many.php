@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Phocate\Token;
 
 
-class ManyTokensParser extends TokensParser
+class Many extends TokensParser
 {
     /** @var TokensParser */
     private $parser;
