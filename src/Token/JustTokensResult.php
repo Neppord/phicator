@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Phocate\Token;
 
 
+use Phocate\EitherResult;
 use Phocate\JustStringResult;
 use Phocate\StringResult;
 
@@ -26,5 +27,10 @@ class JustTokensResult implements TokensResult
             $closure($this->result),
             $this->tokens
         );
+    }
+
+    public function mapToEitherResult(callable $closure): EitherResult
+    {
+        return new JustEitherResult($closure($this->result), $this->tokens);
     }
 }

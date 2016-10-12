@@ -3,69 +3,70 @@ declare(strict_types = 1);
 
 namespace Phocate;
 
+use Phocate\Token\Either;
+use Phocate\Token\EitherParser;
+use Phocate\Token\JustEitherResult;
 use Phocate\Token\Match;
 use Phocate\Token\Token;
 use Phocate\Token\Tokens;
 
 class FileParser
 {
-    public static function namespace_parser(): StringParser
+    public static function namespace_parser(): EitherParser
     {
         return (new Match(T_NAMESPACE))
             ->before(new Match(T_WHITESPACE))
             ->before(
                 (new Match(T_STRING))->sepBy(new Match(T_NS_SEPARATOR))
-            )->mapToStringParser(function (array $tokens): String {
+            )->mapToEitherParser(function (array $tokens): Either {
                 $strings = array_map(function (Token $token) {
                     return $token->contents;
                 },$tokens);
-                return implode('\\', $strings);
+                return new NamespaceObject(implode('\\', $strings));
             });
     }
 
-    public static function class_parser(): StringParser
+    public static function class_parser(): EitherParser
     {
         return (new Match(T_CLASS))
             ->before(new Match(T_WHITESPACE))
             ->before(new Match(T_STRING))
-            ->mapToStringParser(function (array $tokens): String {
+            ->mapToEitherParser(function (array $tokens): Either {
                 $strings = array_map(function (Token $token) {
                     return $token->contents;
                 },$tokens);
-                return implode('', $strings);
+                return new ClassObject(implode('', $strings));
             });
     }
+
 
     public function parser(string $path, Tokens $tokens): FileResult
     {
         $namespace_stmt_p = self::namespace_parser();
         $class_stmt_p = self::class_parser();
+        $body_p = $namespace_stmt_p
+            ->ifFail($class_stmt_p);
         $file = new FileObject();
         $file->path = $path;
         $namespace = null;
 
         while (!$tokens->nil()) {
-            $result = $namespace_stmt_p->parse($tokens);
-            if ($result instanceof NothingStringResult) {
-                $result = $class_stmt_p->parse($tokens);
-                if ($result instanceof NothingStringResult) {
-                    $tokens = $tokens->tail();
-                } else {
-                    $class = new ClassObject();
-                    $class->name = $result->result;
-                    if($namespace === null) {
-                        $namespace = new NamespaceObject();
-                        $namespace->name =  '\\';
+            $result = $body_p->parse($tokens);
+            if ($result instanceof NothingEitherResult) {
+                $tokens = $tokens->tail();
+            } else if ($result instanceof  JustEitherResult) {
+                $tokens = $result->tokens;
+                $object = $result->result;
+                if ($object instanceof NamespaceObject) {
+                    $namespace = $object;
+                    $file->namespaces[] = $namespace;
+                } else if ($object instanceof ClassObject) {
+                    if ($namespace === null) {
+                        $namespace = new NamespaceObject('\\');
                         $file->namespaces[] = $namespace;
                     }
-                    $namespace->classes[] = $class;
-                    $tokens = $result->tokens;
+                    $namespace->classes[] = $object;
                 }
-            } else {
-                $namespace = new NamespaceObject();
-                $namespace->name =  $result->result;
-                $file->namespaces[] = $namespace;
-                $tokens = $result->tokens;
             }
         }
         return new FileResult($file, $tokens);

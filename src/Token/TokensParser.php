@@ -31,4 +31,10 @@ abstract class TokensParser
     {
         return new MapTokenParserToStringParser($this, $closure);
     }
+
+
+    public function mapToEitherParser(callable $closure): EitherParser
+    {
+        return new MapTokenParserToEither($this, $closure);
+    }
 }
