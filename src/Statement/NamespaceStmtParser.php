@@ -8,7 +8,7 @@ use Phocate\StringResult;
 use Phocate\Token\Token;
 use Phocate\Token\Tokens;
 use Phocate\Token\TokensParser;
-use Phocate\Token\TokenTypeParser;
+use Phocate\Token\Match;
 
 class NamespaceStmtParser extends StringParser
 {
@@ -17,11 +17,11 @@ class NamespaceStmtParser extends StringParser
 
     public function __construct()
     {
-        $this->inner = (new TokenTypeParser(T_NAMESPACE))
-            ->before(new TokenTypeParser(T_WHITESPACE))
+        $this->inner = (new Match(T_NAMESPACE))
+            ->before(new Match(T_WHITESPACE))
             ->before(
-                (new TokenTypeParser(T_STRING))
-                    ->sepBy(new TokenTypeParser(T_NS_SEPARATOR))
+                (new Match(T_STRING))
+                    ->sepBy(new Match(T_NS_SEPARATOR))
             );
     }
 

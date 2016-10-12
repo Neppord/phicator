@@ -8,7 +8,7 @@ use Phocate\StringResult;
 use Phocate\Token\Token;
 use Phocate\Token\Tokens;
 use Phocate\Token\TokensParser;
-use Phocate\Token\TokenTypeParser;
+use Phocate\Token\Match;
 
 class ClassStmtParser extends StringParser
 {
@@ -18,9 +18,9 @@ class ClassStmtParser extends StringParser
 
     public function __construct()
     {
-        $this->inner = (new TokenTypeParser(T_CLASS))
-            ->before(new TokenTypeParser(T_WHITESPACE))
-            ->before(new TokenTypeParser(T_STRING));
+        $this->inner = (new Match(T_CLASS))
+            ->before(new Match(T_WHITESPACE))
+            ->before(new Match(T_STRING));
     }
 
     public function parse(Tokens $tokens): StringResult

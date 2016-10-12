@@ -1,7 +1,7 @@
 <?php
 namespace Phocate\Token;
 
-class TokenTypeParser extends TokensParser
+class Match extends TokensParser
 {
     /** @var int */
     private $type;
