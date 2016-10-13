@@ -140,13 +140,13 @@ class FileParser
                     $file->namespaces[] = $namespace;
                 } else if ($object instanceof UseObject) {
                     if ($namespace === null) {
-                        $namespace = new NamespaceObject('\\');
+                        $namespace = new NamespaceObject('');
                         $file->namespaces[] = $namespace;
                     }
                     $namespace->usages[] = $object;
                 } else if ($object instanceof ClassObject) {
                     if ($namespace === null) {
-                        $namespace = new NamespaceObject('\\');
+                        $namespace = new NamespaceObject('');
                         $file->namespaces[] = $namespace;
                     }
                     $namespace->classes[] = $object;
