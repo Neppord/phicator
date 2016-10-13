@@ -10,16 +10,43 @@ use Phocate\Parsing\Data\UseObject;
 use Phocate\Parsing\Token\Match;
 use Phocate\Parsing\Token\Token;
 use Phocate\Parsing\Token\Tokens;
+use Phocate\Parsing\Token\TokensParser;
 
 class FileParser
 {
+    public static function fqn_parser(): TokensParser
+    {
+        return (new Match(T_STRING))->sepBy(new Match(T_NS_SEPARATOR));
+    }
+
+    public static function extends_parser(string $class_name): EitherParser
+    {
+        return (new Match(T_WHITESPACE))
+            ->before(new Match(T_EXTENDS))
+            ->before(new Match(T_WHITESPACE))
+            ->before(new Match(T_STRING))
+            ->mapToEitherParser(function (array $tokens) use ($class_name) {
+                return new ClassObject($class_name, $tokens[0]->contents, []);
+            });
+    }
+
+    public static function implements_parser(string $class_name): EitherParser
+    {
+        return (new Match(T_WHITESPACE))
+            ->before(new Match(T_IMPLEMENTS))
+            ->before(new Match(T_WHITESPACE))
+            ->before(new Match(T_STRING))
+            ->mapToEitherParser(function (array $tokens) use ($class_name) {
+                return new ClassObject($class_name, '', [$tokens[0]->contents]);
+            });
+    }
+
     public static function namespace_parser(): EitherParser
     {
         return (new Match(T_NAMESPACE))
             ->before(new Match(T_WHITESPACE))
-            ->before(
-                (new Match(T_STRING))->sepBy(new Match(T_NS_SEPARATOR))
-            )->mapToEitherParser(function (array $tokens): Either {
+            ->before(self::fqn_parser())
+            ->mapToEitherParser(function (array $tokens): Either {
                 $strings = array_map(function (Token $token) {
                     return $token->contents;
                 },$tokens);
@@ -34,23 +61,9 @@ class FileParser
             ->before(new Match(T_STRING))
             ->bindEither(function ($tokens): EitherParser {
                 $class_name = $tokens[0]->contents;
-                $extends = (new Match(T_WHITESPACE))
-                    ->before(new Match(T_EXTENDS))
-                    ->before(new Match(T_WHITESPACE))
-                    ->before(new Match(T_STRING))
-                    ->mapToEitherParser(function (array $tokens) use ($class_name) {
-                        return new ClassObject($class_name, $tokens[0]->contents, []);
-                    });
-                $implements = (new Match(T_WHITESPACE))
-                    ->before(new Match(T_IMPLEMENTS))
-                    ->before(new Match(T_WHITESPACE))
-                    ->before(new Match(T_STRING))
-                    ->mapToEitherParser(function (array $tokens) use ($class_name) {
-                        return new ClassObject($class_name, '', [$tokens[0]->contents]);
-                    });
                 $normal = new PureEitherParser(new ClassObject($class_name, '', []));
-                return $extends
-                    ->ifFail($implements)
+                return self::extends_parser($class_name)
+                    ->ifFail(self::implements_parser($class_name))
                     ->ifFail($normal);
             });
     }
@@ -60,7 +73,7 @@ class FileParser
         return (new Match(T_USE))
             ->before(new Match(T_WHITESPACE))
             ->before(
-                (new Match(T_STRING))->sepBy(new Match(T_NS_SEPARATOR))
+                self::fqn_parser()
             )
             ->mapToEitherParser(function (array $tokens): Either {
                 $strings = array_map(function (Token $token) {
