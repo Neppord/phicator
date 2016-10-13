@@ -9,7 +9,6 @@ use Phocate\Data\NamespaceObject;
 use Phocate\Data\UseObject;
 use Phocate\Token\Either;
 use Phocate\Token\EitherParser;
-use Phocate\Token\JustEitherResult;
 use Phocate\Token\Match;
 use Phocate\Token\Token;
 use Phocate\Token\Tokens;

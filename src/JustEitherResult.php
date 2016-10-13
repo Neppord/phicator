@@ -1,10 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace Phocate\Token;
+namespace Phocate;
 
 
-use Phocate\EitherResult;
+use Phocate\Token\Either;
+use Phocate\Token\Tokens;
 
 class JustEitherResult implements EitherResult
 {

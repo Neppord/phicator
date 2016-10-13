@@ -6,7 +6,6 @@ namespace Phocate;
 
 use Phocate\Token\Either;
 use Phocate\Token\EitherParser;
-use Phocate\Token\JustEitherResult;
 use Phocate\Token\Tokens;
 
 class PureEitherParser extends EitherParser

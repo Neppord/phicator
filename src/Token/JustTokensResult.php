@@ -5,6 +5,7 @@ namespace Phocate\Token;
 
 
 use Phocate\EitherResult;
+use Phocate\JustEitherResult;
 use Phocate\JustStringResult;
 use Phocate\StringResult;
 
