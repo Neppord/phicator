@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Phocate;
 
+use Phocate\Data\FileObject;
 use Phocate\Token\Tokens;
 
 class FileResult

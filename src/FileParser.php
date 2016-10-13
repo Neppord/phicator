@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace Phocate;
 
+use Phocate\Data\ClassObject;
+use Phocate\Data\FileObject;
+use Phocate\Data\NamespaceObject;
+use Phocate\Data\UseObject;
 use Phocate\Token\Either;
 use Phocate\Token\EitherParser;
 use Phocate\Token\JustEitherResult;
