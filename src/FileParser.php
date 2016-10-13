@@ -35,11 +35,26 @@ class FileParser
         return (new Match(T_CLASS))
             ->before(new Match(T_WHITESPACE))
             ->before(new Match(T_STRING))
-            ->mapToEitherParser(function (array $tokens): Either {
-                $strings = array_map(function (Token $token) {
-                    return $token->contents;
-                },$tokens);
-                return new ClassObject(implode('', $strings));
+            ->bindEither(function ($tokens): EitherParser {
+                $class_name = $tokens[0]->contents;
+                $extends = (new Match(T_WHITESPACE))
+                    ->before(new Match(T_EXTENDS))
+                    ->before(new Match(T_WHITESPACE))
+                    ->before(new Match(T_STRING))
+                    ->mapToEitherParser(function (array $tokens) use ($class_name) {
+                        return new ClassObject($class_name, $tokens[0]->contents, []);
+                    });
+                $implements = (new Match(T_WHITESPACE))
+                    ->before(new Match(T_IMPLEMENTS))
+                    ->before(new Match(T_WHITESPACE))
+                    ->before(new Match(T_STRING))
+                    ->mapToEitherParser(function (array $tokens) use ($class_name) {
+                        return new ClassObject($class_name, '', [$tokens[0]->contents]);
+                    });
+                $normal = new PureEitherParser(new ClassObject($class_name, '', []));
+                return $extends
+                    ->ifFail($implements)
+                    ->ifFail($normal);
             });
     }
 

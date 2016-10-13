@@ -14,6 +14,11 @@ abstract class TokensParser
         return new BindTokensParser($this, $closure);
     }
 
+    public function bindEither(callable $closure): EitherParser
+    {
+        return new BindTokensParserToEitherParser($this, $closure);
+    }
+
     public function before(TokensParser $parser): TokensParser
     {
         /** @noinspection PhpUnusedParameterInspection */
