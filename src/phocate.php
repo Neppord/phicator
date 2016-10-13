@@ -18,6 +18,7 @@ $sql .= "CREATE TABLE IF NOT EXISTS namespaces (namespace_path TEXT, namespace T
 $sql .= "CREATE TABLE IF NOT EXISTS usages (usage_path TEXT, namespace TEXT, FQN TEXT, name TEXT);\n";
 $sql .= "CREATE TABLE IF NOT EXISTS classes (class_path TEXT, namespace TEXT, FQN TEXT, name TEXT);\n";
 $sql .= "CREATE TABLE IF NOT EXISTS extends (FQN TEXT, super_FQN TEXT);\n";
+$sql .= "CREATE TABLE IF NOT EXISTS implements (FQN TEXT, super_FQN TEXT);\n";
 foreach($project_dir->getPhpFiles() as $php_file) {
     $path = $php_file->getPath();
     $tokens = $php_file->getTokens();
@@ -48,6 +49,19 @@ foreach($project_dir->getPhpFiles() as $php_file) {
                     }
                 }
                 $sql .= "INSERT OR REPLACE INTO extends VALUES (\"$FQN\", \"$super_FQN\");\n";
+            }
+            foreach ($class->implements as $interface) {
+                if ($interface[0] === '\\') {
+                    $super_FQN = "$interface";
+                } else {
+                    $super_FQN = "$namespace_name\\$interface";
+                    foreach($namespace->usages as $usage) {
+                        if ($usage->name === $interface) {
+                            $super_FQN = $usage->FQN;
+                        }
+                    }
+                }
+                $sql .= "INSERT OR REPLACE INTO implements VALUES (\"$FQN\", \"$super_FQN\");\n";
             }
         }
     }
