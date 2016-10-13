@@ -43,4 +43,9 @@ abstract class TokensParser
     {
         return new MapTokenParserToEither($this, $closure);
     }
+
+    public function ifFail(TokensParser $parser): TokensParser
+    {
+        return new IfFailTokenParser($this, $parser);
+    }
 }
