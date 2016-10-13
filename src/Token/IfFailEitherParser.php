@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Phocate\Token;
 
 
+use Phocate\EitherParser;
 use Phocate\EitherResult;
 use Phocate\NothingEitherResult;
 

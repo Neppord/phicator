@@ -1,10 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace Phocate\Token;
+namespace Phocate;
 
 
-use Phocate\EitherResult;
+use Phocate\Token\IfFailEitherParser;
+use Phocate\Token\Tokens;
 
 abstract class EitherParser
 {

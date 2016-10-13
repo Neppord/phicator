@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace Phocate;
 
 
-use Phocate\Token\EitherParser;
 use Phocate\Token\Tokens;
 
 class PureEitherParser extends EitherParser

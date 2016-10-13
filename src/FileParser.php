@@ -7,7 +7,6 @@ use Phocate\Data\ClassObject;
 use Phocate\Data\FileObject;
 use Phocate\Data\NamespaceObject;
 use Phocate\Data\UseObject;
-use Phocate\Token\EitherParser;
 use Phocate\Token\Match;
 use Phocate\Token\Token;
 use Phocate\Token\Tokens;
