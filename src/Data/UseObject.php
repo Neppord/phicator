@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Phocate\Data;
 
 
-use Phocate\Token\Either;
+use Phocate\Either;
 
 class UseObject implements Either
 {

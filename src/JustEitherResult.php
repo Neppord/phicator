@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace Phocate;
 
 
-use Phocate\Token\Either;
 use Phocate\Token\Tokens;
 
 class JustEitherResult implements EitherResult
