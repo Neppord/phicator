@@ -14,7 +14,9 @@ for($i = 0; isset($in[$i]); $i += 1) {
     $like .= $in[$i] . '%';
 }
 $pdo = new PDO('sqlite:phocate.db');
-$stmt = $pdo->prepare("SELECT class_path FROM classes WHERE FQN LIKE ?");
+$stmt = $pdo->prepare(
+    "SELECT class_path FROM classes WHERE FQN LIKE ? ORDER BY LENGTH(FQN)"
+);
 $stmt->execute([$like]);
 $results = $stmt->fetchAll();
 if (empty($results)) {
