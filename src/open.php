@@ -14,6 +14,7 @@ for($i = 0; isset($in[$i]); $i += 1) {
     $like .= $in[$i] . '%';
 }
 $pdo = new PDO('sqlite:phocate.db');
+$pdo->exec('PRAGMA case_sensitive_like=ON;');
 $stmt = $pdo->prepare(
     "SELECT class_path FROM classes WHERE FQN LIKE ? ORDER BY LENGTH(FQN)"
 );
