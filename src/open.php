@@ -21,7 +21,9 @@ if (empty($results)) {
     echo "No Class matched\n";
 } else {
     $path = $results[0]['class_path'];
-    $cmd = '$EDITOR "' . $path . '"';
-    echo "$cmd\n";
-    passthru($cmd);
+    $which = popen('which $EDITOR', 'r');
+    $editor = trim(stream_get_contents($which));
+    pclose($which);
+    echo "$editor\n";
+    pcntl_exec($editor, [$path]);
 }
