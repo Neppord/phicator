@@ -23,9 +23,12 @@ if (empty($results)) {
     echo "No Class matched\n";
 } else {
     $path = $results[0]['class_path'];
-    $which = popen('which $EDITOR', 'r');
-    $editor = trim(stream_get_contents($which));
-    pclose($which);
-    echo "$editor\n";
-    pcntl_exec($editor, [$path]);
+    $cmd = preg_split('/\s+/', getenv('EDITOR'));
+    $editor = array_shift($cmd);
+    if ($editor[0] !== '/') {
+        $which = popen('which $EDITOR', 'r');
+        $editor = trim(stream_get_contents($which));
+        pclose($which);
+    }
+    pcntl_exec($editor, array_merge($cmd, [$path]));
 }
