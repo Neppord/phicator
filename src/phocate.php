@@ -15,11 +15,7 @@ $file_p = new FileParser();
 
 $project_dir = new Directory($argv[1]);
 $sql = "BEGIN;\n";
-$sql .= "CREATE TABLE IF NOT EXISTS namespaces (namespace_path TEXT, namespace TEXT);\n";
-$sql .= "CREATE TABLE IF NOT EXISTS usages (usage_path TEXT, namespace TEXT, FQN TEXT, name TEXT);\n";
-$sql .= "CREATE TABLE IF NOT EXISTS classes (class_path TEXT, namespace TEXT, FQN TEXT, name TEXT);\n";
-$sql .= "CREATE TABLE IF NOT EXISTS extends (FQN TEXT, super_FQN TEXT);\n";
-$sql .= "CREATE TABLE IF NOT EXISTS implements (FQN TEXT, interface_FQN TEXT);\n";
+$sql .= file_get_contents(__DIR__ . '/schema.sql');
 foreach($project_dir->getPhpFiles() as $php_file) {
     $path = $php_file->getPath();
     $tokens = $php_file->getTokens();
