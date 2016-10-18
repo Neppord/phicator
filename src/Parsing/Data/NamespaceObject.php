@@ -13,8 +13,8 @@ class NamespaceObject implements Either
 
     /** @var ClassObject[] */
     public $classes = [];
-    /** @var UseObject[] */
-    public $usages = [];
+    /** @var Usages */
+    public $usages;
     public $functions = [];
     public $variables = [];
 
@@ -22,5 +22,6 @@ class NamespaceObject implements Either
         string $name
     ) {
         $this->name = $name;
+        $this->usages = new EmptyUsages();
     }
 }

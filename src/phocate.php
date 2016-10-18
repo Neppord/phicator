@@ -5,6 +5,7 @@ namespace Phocate;
 
 use PDO;
 use Phocate\File\Directory;
+use Phocate\Parsing\Data\Usage;
 use Phocate\Parsing\FileParser;
 
 ini_set('memory_limit', '1024M');
@@ -24,7 +25,7 @@ foreach($project_dir->getPhpFiles() as $php_file) {
     foreach ($result->file->namespaces as $namespace) {
         $namespace_name = $namespace->name;
         $sql .= "INSERT OR REPLACE INTO namespaces (namespace_path, namespace) VALUES (\"$path\", \"$namespace_name\");\n";
-        foreach ($namespace->usages as $use) {
+        foreach ($namespace->usages->toArray() as $use) {
             $name = $use->name;
             $FQN = $use->FQN;
             $sql .= "INSERT OR REPLACE INTO usages (usage_path, namespace, FQN, name) VALUES (\"$path\", \"$namespace_name\", \"$FQN\", \"$name\");\n";
@@ -38,11 +39,11 @@ foreach($project_dir->getPhpFiles() as $php_file) {
                 if ($extends[0] === '\\') {
                     $super_FQN = "$extends";
                 } else {
-                    $super_FQN = "$namespace_name\\$extends";
-                    foreach($namespace->usages as $usage) {
-                        if ($usage->name === $extends) {
-                            $super_FQN = $usage->FQN;
-                        }
+                    $usage = $namespace->usages->get($extends);
+                    if ($usage instanceof Usage) {
+                        $super_FQN = $usage->FQN;
+                    } else {
+                        $super_FQN = "$namespace_name\\$extends";
                     }
                 }
                 $sql .= "INSERT OR REPLACE INTO extends VALUES (\"$FQN\", \"$super_FQN\");\n";
@@ -51,11 +52,11 @@ foreach($project_dir->getPhpFiles() as $php_file) {
                 if ($interface[0] === '\\') {
                     $interface_FQN = "$interface";
                 } else {
-                    $interface_FQN = "$namespace_name\\$interface";
-                    foreach($namespace->usages as $usage) {
-                        if ($usage->name === $interface) {
-                            $interface_FQN = $usage->FQN;
-                        }
+                    $usage = $namespace->usages->get($interface);
+                    if ($usage instanceof Usage) {
+                        $interface_FQN = $usage->FQN;
+                    } else {
+                        $interface_FQN = "$namespace_name\\$interface";
                     }
                 }
                 $sql .= "INSERT OR REPLACE INTO implements VALUES (\"$FQN\", \"$interface_FQN\");\n";

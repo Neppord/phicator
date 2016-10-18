@@ -4,9 +4,10 @@ declare(strict_types = 1);
 namespace Phocate\Parsing;
 
 use Phocate\Parsing\Data\ClassObject;
+use Phocate\Parsing\Data\ConsUsages;
 use Phocate\Parsing\Data\FileObject;
 use Phocate\Parsing\Data\NamespaceObject;
-use Phocate\Parsing\Data\UseObject;
+use Phocate\Parsing\Data\Usage;
 use Phocate\Parsing\Token\Match;
 use Phocate\Parsing\Token\PureTokenParser;
 use Phocate\Parsing\Token\Token;
@@ -110,7 +111,7 @@ class FileParser
                     return $token->contents;
                 },$tokens);
                 $FQN = implode('\\', $strings);
-                return new UseObject($FQN, $tokens[count($tokens) - 1]->contents);
+                return new Usage($FQN, $tokens[count($tokens) - 1]->contents);
             });
     }
 
@@ -138,12 +139,16 @@ class FileParser
                 if ($object instanceof NamespaceObject) {
                     $namespace = $object;
                     $file->namespaces[] = $namespace;
-                } else if ($object instanceof UseObject) {
+                } else if ($object instanceof Usage) {
                     if ($namespace === null) {
                         $namespace = new NamespaceObject('');
-                        $file->namespaces[] = $namespace;
+                        $file->namespaces = $namespace;
+                        $file->namespaces = $namespace;
                     }
-                    $namespace->usages[] = $object;
+                    $namespace->usages = new ConsUsages(
+                        $object,
+                        $namespace->usages
+                    );
                 } else if ($object instanceof ClassObject) {
                     if ($namespace === null) {
                         $namespace = new NamespaceObject('');

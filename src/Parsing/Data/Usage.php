@@ -6,7 +6,7 @@ namespace Phocate\Parsing\Data;
 
 use Phocate\Parsing\Either;
 
-class UseObject implements Either
+class Usage implements Either, MaybeUsage
 {
 
     /** @var string */
