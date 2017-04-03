@@ -13,6 +13,9 @@ class Match extends TokensParser
 
     public function parse(Tokens $tokens): TokensResult
     {
+        if ($tokens->nil()) {
+            return new NothingTokensResult();
+        }
         $head = $tokens->head();
         if ($head->type === $this->type) {
             return new JustTokensResult([$head], $tokens->tail());

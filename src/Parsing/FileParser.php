@@ -142,8 +142,7 @@ class FileParser
                 } else if ($object instanceof Usage) {
                     if ($namespace === null) {
                         $namespace = new NamespaceObject('');
-                        $file->namespaces = $namespace;
-                        $file->namespaces = $namespace;
+                        $file->namespaces[] = $namespace;
                     }
                     $namespace->usages = new ConsUsages(
                         $object,
