@@ -21,4 +21,9 @@ class EmptyUsages implements Usages
     {
         return [];
     }
+
+    public function getIterator()
+    {
+        return new UsageIterator($this);
+    }
 }

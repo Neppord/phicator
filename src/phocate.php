@@ -25,16 +25,16 @@ foreach($project_dir->getPhpFiles() as $php_file) {
     $result = $file_p->parser($path, $tokens);
     foreach ($result->file->namespaces as $namespace) {
         $namespace_name = $namespace->name;
-        $sql .= "INSERT OR REPLACE INTO namespaces (namespace_path, namespace) VALUES (\"$path\", \"$namespace_name\");\n";
-        foreach ($namespace->usages->toArray() as $use) {
+        $sql .= "INSERT OR REPLACE INTO namespaces (namespace_path, namespace) VALUES (TEXT \"$path\", TEXT \"$namespace_name\");\n";
+        foreach ($namespace->usages as $use) {
             $name = $use->name;
             $FQN = $use->FQN;
-            $sql .= "INSERT OR REPLACE INTO usages (usage_path, namespace, FQN, name) VALUES (\"$path\", \"$namespace_name\", \"$FQN\", \"$name\");\n";
+            $sql .= "INSERT OR REPLACE INTO usages (usage_path, namespace, FQN, name) VALUES (TEXT \"$path\",TEXT \"$namespace_name\", TEXT \"$FQN\", TEXT \"$name\");\n";
         }
         foreach ($namespace->classes as $class) {
             $name = $class->name;
             $FQN = "$namespace_name\\$name";
-            $sql .= "INSERT OR REPLACE INTO classes (class_path, namespace, FQN, name) VALUES (\"$path\", \"$namespace_name\", \"$FQN\", \"$name\");\n";
+            $sql .= "INSERT OR REPLACE INTO classes (class_path, namespace, FQN, name) VALUES (TEXT \"$path\", TEXT \"$namespace_name\", TEXT \"$FQN\", TEXT \"$name\");\n";
             if ($class->extends != '') {
                 $extends = $class->extends;
                 if ($extends[0] === '\\') {
@@ -47,7 +47,7 @@ foreach($project_dir->getPhpFiles() as $php_file) {
                         $super_FQN = "$namespace_name\\$extends";
                     }
                 }
-                $sql .= "INSERT OR REPLACE INTO extends VALUES (\"$FQN\", \"$super_FQN\");\n";
+                $sql .= "INSERT OR REPLACE INTO extends VALUES (TEXT \"$FQN\", TEXT \"$super_FQN\");\n";
             }
             foreach ($class->implements as $interface) {
                 if ($interface[0] === '\\') {
@@ -60,7 +60,7 @@ foreach($project_dir->getPhpFiles() as $php_file) {
                         $interface_FQN = "$namespace_name\\$interface";
                     }
                 }
-                $sql .= "INSERT OR REPLACE INTO implements VALUES (\"$FQN\", \"$interface_FQN\");\n";
+                $sql .= "INSERT OR REPLACE INTO implements VALUES (TEXT \"$FQN\", TEXT \"$interface_FQN\");\n";
             }
         }
     }

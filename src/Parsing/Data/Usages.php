@@ -4,7 +4,7 @@
 namespace Phocate\Parsing\Data;
 
 
-interface Usages
+interface Usages extends \IteratorAggregate
 {
     public function toArray();
     public function get(string $name): MaybeUsage;

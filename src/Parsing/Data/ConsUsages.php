@@ -41,4 +41,19 @@ class ConsUsages implements Usages
             $this->tail->toArray()
         );
     }
+
+    public function getIterator()
+    {
+        return new UsageIterator($this);
+    }
+
+    public function getHead(): Usage
+    {
+        return $this->head;
+    }
+
+    public function getTail(): Usages
+    {
+        return $this->tail;
+    }
 }
