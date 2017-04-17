@@ -6,7 +6,7 @@ namespace Phocate;
 
 use PDO;
 use Phocate\File\Directory;
-use Phocate\Parsing\Data\Usage;
+use Phocate\Parsing\Data\UseData\Usage;
 use Phocate\Parsing\FileParser;
 
 ini_set('memory_limit', '1024M');

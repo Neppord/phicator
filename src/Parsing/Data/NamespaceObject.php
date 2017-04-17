@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace Phocate\Parsing\Data;
 
 
+use Phocate\Parsing\Data\UseData\EmptyUsages;
+use Phocate\Parsing\Data\UseData\Usages;
 use Phocate\Parsing\Either;
 
 class NamespaceObject implements Either
