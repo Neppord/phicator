@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS namespaces (
+CREATE TABLE IF NOT EXISTS namespace (
   namespace_path TEXT,
   namespace      TEXT
 );
