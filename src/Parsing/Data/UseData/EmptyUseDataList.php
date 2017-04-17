@@ -4,15 +4,15 @@ declare(strict_types = 1);
 namespace Phocate\Parsing\Data\UseData;
 
 
-class EmptyUsages implements Usages
+class EmptyUseDataList implements UseDataList
 {
 
-    public function get(string $name): MaybeUsage
+    public function get(string $name): MaybeUseData
     {
-        return new NothingUsage();
+        return new NothingUseData();
     }
 
-    public function append(Usages $other): Usages
+    public function append(UseDataList $other): UseDataList
     {
         return $other;
     }

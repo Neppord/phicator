@@ -6,7 +6,7 @@ namespace Phocate;
 
 use PDO;
 use Phocate\File\Directory;
-use Phocate\Parsing\Data\UseData\Usage;
+use Phocate\Parsing\Data\UseData\UseData;
 use Phocate\Parsing\FileParser;
 
 ini_set('memory_limit', '1024M');
@@ -77,7 +77,7 @@ foreach($project_dir->getPhpFiles() as $php_file) {
                     $super_FQN = "$extends";
                 } else {
                     $usage = $namespace->usages->get($extends);
-                    if ($usage instanceof Usage) {
+                    if ($usage instanceof UseData) {
                         $super_FQN = $usage->FQN;
                     } else {
                         $super_FQN = "$namespace_name\\$extends";
@@ -93,7 +93,7 @@ foreach($project_dir->getPhpFiles() as $php_file) {
                     $interface_FQN = "$interface";
                 } else {
                     $usage = $namespace->usages->get($interface);
-                    if ($usage instanceof Usage) {
+                    if ($usage instanceof UseData) {
                         $interface_FQN = $usage->FQN;
                     } else {
                         $interface_FQN = "$namespace_name\\$interface";

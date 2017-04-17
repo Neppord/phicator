@@ -4,20 +4,20 @@ declare(strict_types = 1);
 namespace Phocate\Parsing\Data\UseData;
 
 
-class ConsUsages implements Usages
+class ConsUseDataList implements UseDataList
 {
-    /** @var Usage */
+    /** @var UseData */
     private $head;
-    /** @var Usages */
+    /** @var UseDataList */
     private $tail;
 
-    public function __construct(Usage $head, Usages $tail)
+    public function __construct(UseData $head, UseDataList $tail)
     {
         $this->head = $head;
         $this->tail = $tail;
     }
 
-    public function get(string $name): MaybeUsage
+    public function get(string $name): MaybeUseData
     {
         if ($this->head->name === $name) {
             return $this->head;
@@ -26,9 +26,9 @@ class ConsUsages implements Usages
         }
     }
 
-    public function append(Usages $other): Usages
+    public function append(UseDataList $other): UseDataList
     {
-        return new ConsUsages(
+        return new ConsUseDataList(
             $this->head,
             $this->tail->append($other)
         );
@@ -47,12 +47,12 @@ class ConsUsages implements Usages
         return new UsagesIterator($this);
     }
 
-    public function getHead(): Usage
+    public function getHead(): UseData
     {
         return $this->head;
     }
 
-    public function getTail(): Usages
+    public function getTail(): UseDataList
     {
         return $this->tail;
     }

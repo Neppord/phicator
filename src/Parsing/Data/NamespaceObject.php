@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace Phocate\Parsing\Data;
 
 
-use Phocate\Parsing\Data\UseData\EmptyUsages;
-use Phocate\Parsing\Data\UseData\Usages;
+use Phocate\Parsing\Data\UseData\EmptyUseDataList;
+use Phocate\Parsing\Data\UseData\UseDataList;
 use Phocate\Parsing\Either;
 
 class NamespaceObject implements Either
@@ -15,7 +15,7 @@ class NamespaceObject implements Either
 
     /** @var ClassObject[] */
     public $classes = [];
-    /** @var Usages */
+    /** @var UseDataList */
     public $usages;
     public $functions = [];
     public $variables = [];
@@ -24,6 +24,6 @@ class NamespaceObject implements Either
         string $name
     ) {
         $this->name = $name;
-        $this->usages = new EmptyUsages();
+        $this->usages = new EmptyUseDataList();
     }
 }

@@ -7,17 +7,17 @@ namespace Phocate\Parsing\Data\UseData;
 class UsagesIterator implements \Iterator
 {
 
-    /** @var Usages */
+    /** @var UseDataList */
     private $usages;
 
-    public function __construct(Usages $usage)
+    public function __construct(UseDataList $usage)
     {
         $this->usages = $usage;
     }
 
     public function current()
     {
-        if ($this->usages instanceof ConsUsages) {
+        if ($this->usages instanceof ConsUseDataList) {
             return $this->usages->getHead();
         } else {
             return null;
@@ -26,7 +26,7 @@ class UsagesIterator implements \Iterator
 
     public function next()
     {
-        if ($this->usages instanceof ConsUsages) {
+        if ($this->usages instanceof ConsUseDataList) {
             $this->usages = $this->usages->getTail();
         }
     }
@@ -38,7 +38,7 @@ class UsagesIterator implements \Iterator
 
     public function valid()
     {
-        return $this->usages instanceof ConsUsages;
+        return $this->usages instanceof ConsUseDataList;
     }
 
     public function rewind()
