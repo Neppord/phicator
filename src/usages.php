@@ -16,7 +16,7 @@ for($i = 0; isset($in[$i]); $i += 1) {
 }
 $pdo = new PDO('sqlite:phocate.db');
 $stmt = $pdo->prepare(
-    "SELECT class_path, usage_path, FQN FROM usages JOIN classes USING (FQN) WHERE FQN LIKE ? "
+    "SELECT class_path, usage_path, FQN FROM use JOIN class USING (FQN) WHERE FQN LIKE ? "
 );
 $stmt->execute([$like]);
 $results = $stmt->fetchAll();
