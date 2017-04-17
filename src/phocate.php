@@ -22,7 +22,7 @@ $pdo->exec('BEGIN');
 $schema = file_get_contents(__DIR__ . '/schema.sql');
 $pdo->exec($schema);
 $insert_namespace = $pdo->prepare("INSERT OR REPLACE INTO namespace (namespace_path, namespace) VALUES (:namespace_path, :namespace)");
-$insert_class = $pdo->prepare("INSERT OR REPLACE INTO classes (class_path, namespace, FQN, name) VALUES (:class_path, :namespace, :FQN, :name)");
+$insert_class = $pdo->prepare("INSERT OR REPLACE INTO class (class_path, namespace, FQN, name) VALUES (:class_path, :namespace, :FQN, :name)");
 $insert_use = $pdo->prepare("INSERT OR REPLACE INTO use (usage_path, namespace, FQN, name) VALUES (:usage_path, :namespace, :FQN, :name);");
 $insert_extends = $pdo->prepare("INSERT OR REPLACE INTO extends (FQN, super_FQN) VALUES (:FQN, :super_FQN)");
 $insert_implements = $pdo->prepare("INSERT OR REPLACE INTO implements (FQN, interface_FQN) VALUES (:FQN, :interface_FQN);");

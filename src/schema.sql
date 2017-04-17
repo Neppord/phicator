@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS use (
   name       TEXT
 );
 
-CREATE TABLE IF NOT EXISTS classes (
+CREATE TABLE IF NOT EXISTS class (
   class_path TEXT,
   namespace  TEXT,
   FQN        TEXT,
