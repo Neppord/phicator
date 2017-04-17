@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS namespace (
   namespace      TEXT
 );
 
-CREATE TABLE IF NOT EXISTS usages (
+CREATE TABLE IF NOT EXISTS use (
   usage_path TEXT,
   namespace  TEXT,
   FQN        TEXT,
