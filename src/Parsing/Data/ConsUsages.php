@@ -44,7 +44,7 @@ class ConsUsages implements Usages
 
     public function getIterator()
     {
-        return new UsageIterator($this);
+        return new UsagesIterator($this);
     }
 
     public function getHead(): Usage

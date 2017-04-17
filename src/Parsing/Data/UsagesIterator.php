@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Phocate\Parsing\Data;
 
 
-class UsageIterator implements \Iterator
+class UsagesIterator implements \Iterator
 {
 
     /** @var Usages */
