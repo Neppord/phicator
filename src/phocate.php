@@ -81,6 +81,12 @@ foreach($project_dir->getPhpFiles() as $php_file) {
                         $super_FQN = $usage->FQN;
                     } else {
                         $super_FQN = "$namespace_name\\$extends";
+                        $insert_use->execute([
+                            ':namespace' => $namespace_name,
+                            ':usage_path' => $path,
+                            ':name' => $extends,
+                            ':FQN' => $super_FQN
+                        ]);
                     }
                 }
                 $insert_extends->execute([
@@ -97,6 +103,12 @@ foreach($project_dir->getPhpFiles() as $php_file) {
                         $interface_FQN = $usage->FQN;
                     } else {
                         $interface_FQN = "$namespace_name\\$interface";
+                        $insert_use->execute([
+                            ':namespace' => $namespace_name,
+                            ':usage_path' => $path,
+                            ':name' => $interface,
+                            ':FQN' => $interface_FQN
+                        ]);
                     }
                 }
                 $insert_implements->execute([
