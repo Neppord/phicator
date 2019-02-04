@@ -16,5 +16,8 @@
   },
   "require": {
     "ext-pdo": "*"
+  },
+  "require-dev": {
+    "vimeo/psalm": "^3.0@dev"
   }
 }
