@@ -26,7 +26,11 @@ if (empty($results)) {
     echo "No Class matched\n";
 } else {
     $path = $results[0]['class_path'];
-    $cmd = preg_split('/\s+/', getenv('EDITOR'));
+    $editor = getenv('EDITOR');
+    if ($editor === false) {
+        $editor = '';
+    }
+    $cmd = preg_split('/\s+/', $editor);
     $editor = array_shift($cmd);
     if ($editor[0] !== '/') {
         $which = popen('which $EDITOR', 'r');
