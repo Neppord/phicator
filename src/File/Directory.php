@@ -22,6 +22,7 @@ class Directory
 
     /**
      * @return \Generator|PhpFile[]
+     * @psalm-return \Generator<PhpFile>;
      */
     public function getPhpFiles(): \Generator
     {
